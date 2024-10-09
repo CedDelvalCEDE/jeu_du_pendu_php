@@ -9,5 +9,5 @@ define("DS", DIRECTORY_SEPARATOR);
 */
 $path_app = __DIR__ . DS . "pendu" . DS . "app.php";
 require_once $path_app;
-start();
+start(10);
 ?>

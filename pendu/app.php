@@ -67,7 +67,7 @@ function check_char(&$word_split, &$view_split, $word_lenght) {
         return [$entry, $good];
     }
     else {
-        echo "ce que vous avez entrez n'est pas une lettre minuscule.";
+        echo "ce que vous avez entrez n'est pas une lettre minuscule." . PHP_EOL;
         return [$entry[1] ,false];
     }
 }
@@ -100,7 +100,7 @@ function game($word, $life, $view) {
     }
 }
 
-function start() {
+function start($life) {
     $word = find_word();
     $life = 10;
     $view = create_view($word);
