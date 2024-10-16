@@ -20,16 +20,19 @@
 */
 
 function convert_array_to_str(array $tab) : string {
+    // give a string form of the array with bracket
     return "[ " . implode(separator:" , ",array:$tab) . " ]";
 }
 
 function unpack_file(): array {
+    // unpack the dictionnary to be read as array
     $path_dict = __DIR__ . DS . ".." . DS . "data" . DS . "dictionnaire.json";
     $dict = file_get_contents($path_dict);
     return json_decode($dict, true);
 }
 
 function find_word(): string {
+    // choose a random word in the dictionnary
     $dict = unpack_file();
     $category_name = array_rand($dict);
     $category = $dict[$category_name];
@@ -37,6 +40,7 @@ function find_word(): string {
 }
 
 function trying_character() {
+    // try an input and see if it's what is expected
     $letter = readline("Entrez une lettre en minuscule : ");
     if (ctype_lower($letter) && strlen($letter) == 1) {
         return [$letter, true];
@@ -45,6 +49,7 @@ function trying_character() {
 }
 
 function create_view($word_selected): string {
+    // set the view of the word completion
     $view = "";
     $nb_char = strlen($word_selected);
     for ($iter = 1; $iter <= $nb_char; $iter++) {
@@ -54,6 +59,7 @@ function create_view($word_selected): string {
 }
 
 function check_char(&$word_split, &$view_split, $word_lenght) {
+    // check if the letter entry is right or not --> TODO integrate the part that stayed in the main funct "game"
     $entry = trying_character();
     $good = false;
     if ($entry[1]) {
@@ -72,7 +78,9 @@ function check_char(&$word_split, &$view_split, $word_lenght) {
     }
 }
 
-function game($word, $life, $view) {
+function game($life) {
+    $word = find_word();
+    $view = create_view($word);
     $char_tried = [];
     $word_split = str_split($word);
     $view_split = str_split($view);
@@ -82,6 +90,7 @@ function game($word, $life, $view) {
         $char_tried_view = convert_array_to_str($char_tried);
         $view_split_setup = convert_array_to_str($view_split);
         echo "Vous avez $life vie(s)" . PHP_EOL . "Voici les lettres qui ont déjà été tentée : $char_tried_view " . PHP_EOL ."  $view_split_setup  :";
+        // [$word_split, $view_split, $word_lenght, $entry, $good];
         $entry = check_char($word_split, $view_split, $word_lenght);
         if (!($entry[1])) {
             $life--;
@@ -98,13 +107,5 @@ function game($word, $life, $view) {
     elseif ($view_split == $word_split) {
         echo "Vous avez gagné. Il vous restait $life vie(s). Le mot était bien $word.";
     }
-}
-
-function start($life) {
-    $word = find_word();
-    $life = 10;
-    $view = create_view($word);
-    game($word, $life, $view);
-
 }
 ?>
